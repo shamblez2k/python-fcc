@@ -1,6 +1,12 @@
 import sys
 import random
+from enum import Enum
 
+class RPS(Enum):
+    ROCK = 1
+    PAPER = 2
+    SCISSORS = 3
+    
 print("")
 
 playerChoice = int(input("Enter... \n1 for Rock, \n2 for Paper, or \n3 for Scissors: \n\n"))
@@ -12,8 +18,8 @@ if playerChoice < 1 or playerChoice > 3:
 computerChoice = int(random.choice("123"))
 
 print("")
-print("You chose " + str(playerChoice) + ".")
-print("Python chose " + str(computerChoice) + ".")
+print("You chose " + str(RPS(playerChoice)).lower().replace("rps.", "") + ".")
+print("Python chose " + str(RPS(computerChoice)).lower().replace("rps.", "") + ".")
 
 # if playerChoice == 1 and computerChoice == 3:
 #     print("You win!")
