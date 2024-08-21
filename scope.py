@@ -1,0 +1,1 @@
+#I didn't feel like doing these exercises because it was basically a recap of what Ì already know
