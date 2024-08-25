@@ -11,221 +11,125 @@ def tictactoe(name="PlayerOne"):
     turn = ""
     player_symbol = "o"
     python_symbol = "x"
+    turn_counter = 0
     
-    # def decide_turn():
-    #     nonlocal name
-    #     nonlocal turn
-    #     nonlocal player_symbol
-    #     nonlocal python_symbol
-    #     player = int(input(f"Hi {name}!\nPick 1 for heads or 2 for tails.\n"))
-    #     if player == 1:
-    #         print("You picked heads!")
-    #     else:
-    #         print("You picked tails!")
-    #     decision = int(random.choice("12"))
-    #     if decision == 1:
-    #         print("Heads goes first!")
-    #     else:
-    #         print("Tails goes first!")
-    #     if player == decision:
-    #         print(f"🥳 Congratulations {name}! You'll go first, so you are x!\n")
-    #         turn = "player"
-    #         player_symbol = "x"
-    #         python_symbol = "o"
-    #     else:
-    #         print("Python goes first, it is x!\n")
-    #         turn = "python"
-        # return decide_turn
-            
-    # coin_flip = decide_turn()
-    # coin_flip()
-    
-    # decide_turn()
+    def decide_turn():
+        nonlocal name, turn, player_symbol, python_symbol
+        player = int(input(f"Hi {name}!\nPick 1 for heads or 2 for tails.\n"))
+        if player == 1:
+            print("You picked heads!")
+        else:
+            print("You picked tails!")
+        decision = int(random.choice("12"))
+        if decision == 1:
+            print("Heads goes first!")
+        else:
+            print("Tails goes first!")
+        if player == decision:
+            print(f"🥳 Congratulations {name}! You'll go first, so you are x!\n")
+            turn = "player"
+            player_symbol = "x"
+            python_symbol = "o"
+        else:
+            print("Python goes first, it is x!\n")
+            turn = "python"
     
     decision_tree = [0,0,0,0,0,0,0,0,0]
     player_tree = [0,0,0,0,0,0,0,0,0]
     python_tree = [0,0,0,0,0,0,0,0,0]
     
-    game_board = ["    |","   ","|    ","    |","   ","|    ","    |","   ","|    "]
+    game_board = ["   ","   ","   "] * 3
+    
+    
+    def display_board():
+        print(f"{game_board[0]} |{game_board[1]}| {game_board[2]}\n=============\n{game_board[3]} |{game_board[4]}| {game_board[5]}\n=============\n{game_board[6]} |{game_board[7]}| {game_board[8]}")
+
+    def check_winner(tree, player_name):
+        win_conditions = [
+            (0, 1, 2), (3, 4, 5), (6, 7, 8),  # Rows
+            (0, 3, 6), (1, 4, 7), (2, 5, 8),  # Columns
+            (0, 4, 8), (2, 4, 6)  # Diagonals
+        ]
+        for condition in win_conditions:
+            if all(tree[i] == 1 for i in condition):
+                return True
+        return False
     
     def play_game():
-        nonlocal decision_tree
-        nonlocal game_board
-        nonlocal turn
-        nonlocal name
-        nonlocal game_count
+        nonlocal turn, turn_counter, player_wins, python_wins, name
         
-        print(f"{game_board[0]}{game_board[1]}{game_board[2]}\n=============\n{game_board[3]}{game_board[4]}{game_board[5]}\n=============\n{game_board[6]}{game_board[7]}{game_board[8]}")
+        if turn_counter == 0:
+            decide_turn()
         
-        if turn == "player":        
-            playerchoice = input(f"\n😁 Hello {name}!\nLet\'s play a game of tic-tac-toe. Please Enter a number corresponding to the empty spaces available, as shown below: \n1 for top-left, \n2 for top-middle,\n3 for top-right,\n4 for middle-left, \n5 for middle-middle,\n6 for middle-right,\n7 for bottom-left, \n8 for bottom-middle,\n9 for middle-right: \n\n")    
+        while turn_counter < 9:
+            display_board()
         
-            if playerchoice not in ["1", "2", "3","4","5","6","7","8","9"] or decision_tree[int(playerchoice)-1] !=0:
-                print(f"Sorry, {name}, you must enter a valid choice.\nPlease enter a number between 1 and 9, based on the key given earlier.")
-                return play_game()
-        
-            player = int(playerchoice)
+            if turn_counter == 0:
+                print(f"\n😁 Hello {name}!\nLet\'s play a game of tic-tac-toe. Please Enter a number corresponding to the empty spaces available, as shown above. \n1 for top-left, \n2 for top-middle,\n3 for top-right,\n4 for middle-left, \n5 for middle-middle,\n6 for middle-right,\n7 for bottom-left, \n8 for bottom-middle,\n9 for middle-right: \n\n")
+    
             
-            nonlocal player_symbol
-            nonlocal player_tree
-            #Update game-board
-            if player == 1:
-                game_board[0] = f"  {player_symbol} |"
-                decision_tree[0] = 1
-                player_tree[0] = 1
-            elif player == 2:
-                game_board[1] = f" {player_symbol} "
-                decision_tree[1] = 1
-                player_tree[1] = 1
-            elif player == 3:
-                game_board[2] = f"| {player_symbol}  "
-                decision_tree[2] = 1
-                player_tree[2] = 1
-            elif player == 4:
-                game_board[3] = f"  {player_symbol} |"
-                decision_tree[3] = 1
-                player_tree[3] = 1
-            elif player == 5:
-                game_board[4] = f" {player_symbol} "
-                decision_tree[4] = 1
-                player_tree[4] = 1
-            elif player == 6:
-                game_board[5] = f"| {player_symbol}  "
-                decision_tree[5] = 1
-                player_tree[5] = 1
-            elif player == 7:
-                game_board[6] = f"  {player_symbol} |"
-                decision_tree[6] = 1
-                player_tree[6] = 1
-            elif player == 8:
-                game_board[7] = f" {player_symbol} "
-                decision_tree[7] = 1
-                player_tree[7] = 1
-            else:
-                game_board[8] = f"| {player_symbol}  "
-                decision_tree[8] = 1
-                player_tree[8] = 1
+            if turn == "player":        
+                playerchoice = input("It is your turn. Please enter your choice:\n")
             
-            turn == "python"
-        else:
-            computerchoice = int(random.choice("123456789"))
-            while decision_tree[computerchoice-1] !=0:
-                computerchoice = int(random.choice("123456789"))
-            
-            python = computerchoice
-            
-            if python == 1:
-                game_board[0] = f"  {python_symbol} |"
-                decision_tree[0] = 1
-                python_tree[0] = 1
-            elif python == 2:
-                game_board[1] = f" {python_symbol} "
-                decision_tree[1] = 1
-                python_tree[1] = 1
-            elif python == 3:
-                game_board[2] = f"| {python_symbol}  "
-                decision_tree[2] = 1
-                python_tree[2] = 1
-            elif python == 4:
-                game_board[3] = f"  {python_symbol} |"
-                decision_tree[3] = 1
-                python_tree[3] = 1
-            elif python == 5:
-                game_board[4] = f" {python_symbol} "
-                decision_tree[4] = 1
-                python_tree[4] = 1
-            elif python == 6:
-                game_board[5] = f"| {python_symbol}  "
-                decision_tree[5] = 1
-                python_tree[5] = 1
-            elif python == 7:
-                game_board[6] = f"  {python_symbol} |"
-                decision_tree[6] = 1
-                python_tree[6] = 1
-            elif python == 8:
-                game_board[7] = f" {python_symbol} "
-                decision_tree[7] = 1
-                python_tree[7] = 1
-            else:
-                game_board[8] = f"| {python_symbol}  "
-                decision_tree[8] = 1
-                python_tree[8] = 1
-            
-            turn = "player"
-            nonlocal player_wins
-            nonlocal python_wins
-            #Check win
-            def turn_outcome():
-                nonlocal player_wins
-                nonlocal python_wins
-                nonlocal game_board
-                nonlocal decision_tree
-                nonlocal player_tree
-                nonlocal python_tree
-                nonlocal game_count
-                
-                if player_tree[0] == 1 and player_tree[1] == 1 and player_tree[2] == 1 or player_tree[3] == 1 and player_tree[4] == 1 and player_tree[5] == 1 or player_tree[6] == 1 and player_tree[7] == 1 and player_tree[8] == 1 or player_tree[0] == 1 and player_tree[3] == 1 and player_tree[6] == 1 or player_tree[1] == 1 and player_tree[4] == 1 and player_tree[7] == 1 or player_tree[2] == 1 and player_tree[5] == 1 and player_tree[8] == 1 or player_tree[0] == 1 and player_tree[4] == 1 and player_tree[8] == 1 or player_tree[2] == 1 and player_tree[4] == 1 and player_tree[6] == 1:
-                    
-                    player_wins += 1
-                    game_count += 1
-                    
-                    #Reset game settings
-                    game_board = ["    |","   ","|    ","    |","   ","|    ","    |","   ","|    "]
-                    decision_tree = [0,0,0,0,0,0,0,0,0]
-                    player_tree = [0,0,0,0,0,0,0,0,0]
-                    python_tree = [0,0,0,0,0,0,0,0,0]
-                    return f"😲 Amazing work, {name}! You won!"
-                elif python_tree[0] == 1 and python_tree[1] == 1 and python_tree[2] == 1 or python_tree[3] == 1 and python_tree[4] == 1 and python_tree[5] == 1 or python_tree[6] == 1 and python_tree[7] == 1 and python_tree[8] == 1 or python_tree[0] == 1 and python_tree[3] == 1 and python_tree[6] == 1 or python_tree[1] == 1 and python_tree[4] == 1 and python_tree[7] == 1 or python_tree[2] == 1 and python_tree[5] == 1 and python_tree[8] == 1 or python_tree[0] == 1 and python_tree[4] == 1 and python_tree[8] == 1 or python_tree[2] == 1 and python_tree[4] == 1 and python_tree[6] == 1:
-                    
-                    python_wins += 1
-                    game_count += 1
-                    
-                    #Reset game settings
-                    game_board = ["    |","   ","|    ","    |","   ","|    ","    |","   ","|    "]
-                    decision_tree = [0,0,0,0,0,0,0,0,0]
-                    player_tree = [0,0,0,0,0,0,0,0,0]
-                    python_tree = [0,0,0,0,0,0,0,0,0]
-                    return f"Better luck next time {name}! 🐍 Python wins this time!"
-                elif decision_tree[0] == 1 and decision_tree[1] == 1 and decision_tree[2] == 1 and decision_tree[3] == 1 and decision_tree[4] == 1 and decision_tree[5] == 1 and decision_tree[6] == 1 and decision_tree[7] == 1 and decision_tree[8] == 1:
-                   
-                    game_count += 1
-                    #Reset game settings
-                    game_board = ["    |","   ","|    ","    |","   ","|    ","    |","   ","|    "]
-                    decision_tree = [0,0,0,0,0,0,0,0,0]
-                    player_tree = [0,0,0,0,0,0,0,0,0]
-                    python_tree = [0,0,0,0,0,0,0,0,0]
-                    return f"😔 The game is tied and there are no winners this time."
-                else:
-                    print("Nobody has won yet, and there are still legal moves remaining. The game continues!")
-                    return play_game()
-
-                    
-            
-            turn_result = turn_outcome()
-            print(turn_result)
-            
-            print(f"\nGame count: {game_count}")
-            print(f"\n{name}\'s wins: {player_wins}")
-            print(f"\nPython\'s wins: {python_wins}")
-            
-            print(f"\nPlay again, {name}?")
-            while True:
-                playagain = input("\nY for Yes or \nN for No \n")
-                if playagain.lower() not in ["y","n"]:
+                if playerchoice not in "123456789" or decision_tree[int(playerchoice)-1] != 0:
+                    print(f"Sorry, {name}, you must enter a valid choice.\nPlease enter a number between 1 and 9, based on the key given earlier.")
                     continue
-                else:
+                    
+                player_move = int(playerchoice) - 1
+                game_board[player_move] = f" {player_symbol} "
+                decision_tree[player_move] = 1
+                player_tree[player_move] = 1
+                print(f"You chose {playerchoice}:\n")
+                    
+                if check_winner(player_tree, name):
+                    player_wins += 1
+                    display_board()
+                    print(f"\n😲 Amazing work, {name}! You won!")
                     break
-            
-            if playagain.lower() == "y":
-                return play_game()
+                turn = "python"
             else:
-                print(f"\n🥳 Thank you for playing, {name}! \n\nSee you next time!")
-                playagain = False
-                if __name__ == "__main__":
-                    sys.exit()
-                else:
-                    return
-    return play_game
+                print(f"It is Python\'s turn.")
+                while True:
+                    computerchoice = int(random.choice("123456789")) - 1
+                    if decision_tree[computerchoice] == 0:
+                        break
+                
+                print(f"Python chose {computerchoice}:\n")
+                game_board[computerchoice] = f" {python_symbol} "
+                decision_tree[computerchoice] = 1
+                python_tree[computerchoice] = 1   
+                
+                if check_winner(python_tree, "Python"):
+                    python_wins += 1
+                    display_board()
+                    print(f"\nBetter luck next time {name}! 🐍 Python wins this time!")
+                    break
+                turn = "player"
+            
+            turn_counter += 1
+        
+        if turn_counter == 9:
+            print("😔 The game is tied and there are no winners this time.")
+            
+        print(f"\nPlay again, {name}?")
+        while True:
+            playagain = input("\nY for Yes or \nN for No \n")
+            if playagain.lower() not in ["y","n"]:
+                continue
+            else:
+                break
+        
+        if playagain.lower() == "y":
+            return tictactoe(name)
+        else:
+            print(f"\n🥳 Thank you for playing, {name}! \n\nSee you next time!")
+            playagain = False
+            if __name__ == "__main__":
+                sys.exit()
+            else:
+                return
+                
+    return play_game()
 
 
 tictactoe("Shalif")
@@ -247,7 +151,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
     
     game_instance = tictactoe(args.name)
-    game_instance()
+    game_instance
                     
             
             
